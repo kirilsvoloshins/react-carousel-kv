@@ -1,0 +1,162 @@
+body {
+    padding: 0;
+    margin: 0;
+    font-size: 1.5em;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+    /* making sure navigating through slides does not cause element selection */
+    user-select: none;
+    --navPanelWidth: 50px;
+}
+
+/* preparing the carousel height and width */
+
+.wrapper {
+    width: 100vw;
+    height: 100vh;
+    margin: auto;
+    position: relative;
+    border: 3px solid rgba(14, 24, 165, 0.5);
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+.nav-overlay {
+    display: flex;
+    flex-direction: column;
+}
+
+.navigation-zones {
+    position: absolute;
+    top: 0;
+    height: 98%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.navigation-big {
+    height: 100%;
+    width: var(--navPanelWidth);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.navigation-left {
+    /* this will be the scroll panel on the left */
+    left: 0;
+    top: 0;
+}
+
+.navigation-right {
+    /* this will be the scroll panel on the right */
+    right: 0;
+    top: 0;
+}
+
+.nav-circle {
+    /* making a nice circle */
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    background-color: rgb(241, 241, 241);
+    /* some text styling */
+    color: rgb(88, 88, 88);
+    font-weight: 700;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 40px;
+    /* make them show they are interactive */
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* for now scroll symbols can be selected since they are basically text. disabling symbol selection */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#contentContainer {
+    height: 100%;
+    /* handling container margins. */
+    box-sizing: border-box;
+    /* since we are planning to show other slides on swipe event, let's store this, previous and next slide in one container.
+    since we need three equal colums, I am going to use display:grid. */
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 300%;
+    margin-left: -100%;
+    /* handling overflowing content */
+    /* let's just hide anything that overflows our slide. */
+    overflow-y: hidden;
+}
+
+#contentContainer div img {
+    /* making sure images stay inside the slide */
+    width: 100%;
+}
+
+#contentContainer div {
+    width: 100%;
+    /* This is one of the slides. Since we already have scroll panels (left and right), I am going to add some padding so these panels don't hide a part of our content. I remember Instagram shows scroll buttons on top of images, but doing so would result in hiding a small part of html content being placed on the slide. */
+    padding: 5px calc(var(--navPanelWidth) + 10px);
+    box-sizing: border-box;
+    text-align: center;
+}
+
+#contentContainer div:nth-child(3) {
+    z-index: -100;
+}
+
+#contentContainer div:nth-child(3) {
+    width: 100%;
+    padding: 5px calc(var(--navPanelWidth) + 10px);
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.slideTo {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    z-index: 9000;
+}
+
+.slideTo input {
+    font-size: 0.9em;
+    width: 40px;
+    margin-left: 5px;
+    margin-right: 5px;
+    text-align: center;
+}
+
+.slideTo button {
+    margin-left: 15px;
+    font-size: 0.9em;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+@media screen and (max-width:1000px) {
+    body {
+        font-size: 1em;
+    }
+    ul {
+        width: 100%;
+    }
+}
