@@ -6,13 +6,11 @@ by Kirils Vološins
 Every slide is a code in HTML. To make the carousel component work, just pass an array of HTML codes to the "slides" prop of the Carousel component.
 <br>
 <br>
-<br>
 
 ## How to view the Carousel demo on PC?
 1. Copy the project folder to the PC
 1. Open the directory react-carousel-kv/dist
 1. Open the file index.html via the web browser
-<br>
 <br>
 <br>
 
