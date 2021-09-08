@@ -3,11 +3,7 @@ import "./Carousel.css";
 import { useState, useEffect, useRef } from "react";
 
 /* External helper functions */
-async function wait() {
-    return new Promise(resolve => {
-        setTimeout(() => resolve(), 1)
-    });
-}
+const wait = async () => new Promise(resolve => { setTimeout(() => resolve(), 1); });
 const getCleanSlideData = (slides, slideId) => `<div>${typeof slides[slideId] === "undefined" ? "" : slides[slideId]}</div>`; /* will not show "undefined" instead of non-existing slides */
 const getUserSwipeDirection = (newMarginLeft) => ({ isUserSwipingRight: newMarginLeft < -100, isUserSwipingLeft: newMarginLeft >= -100 });
 const wasSwipeTooFast = (e, swipeStartData) => {
@@ -20,9 +16,9 @@ const wasSwipeTooShort = (e, swipeStartData) => {
     const MIN_SWIPE_DISTANCE_PX = 50;
     const currentSwipeX = e.changedTouches[0].clientX;
     const swipeStartScreenX = swipeStartData.current.changedTouches[0].clientX;
-    const swipeDeltaX = currentSwipeX - swipeStartScreenX;
-    /* if (Math.abs(swipeDeltaX) < MIN_SWIPE_DISTANCE_PX) console.error(`SWIPE TOO SHORT at (${swipeDeltaX}) px.`) */
-    return Math.abs(swipeDeltaX) < MIN_SWIPE_DISTANCE_PX;
+    const swipeDeltaX = Math.abs(currentSwipeX - swipeStartScreenX);
+    /* if (swipeDeltaX < MIN_SWIPE_DISTANCE_PX) console.error(`SWIPE TOO SHORT at (${swipeDeltaX}) px.`) */
+    return swipeDeltaX < MIN_SWIPE_DISTANCE_PX;
 };
 const isThereNoSlideThere = (isUserSwipingRight, currentlySelectedSlideId) => {
     const idOfSlideToCheckExisting = isUserSwipingRight ? currentlySelectedSlideId + 1 : currentlySelectedSlideId - 1;
@@ -71,8 +67,23 @@ export function Carousel(props) {
         changeSlideContent(slides, currentlySelectedSlideId, contentContainer); /* return slide container to the initial state. */
     }, [currentlySelectedSlideId]);
 
-
     /* MAIN FUNCTIONS */
+    async function animateSlideChange(newMarginLeft, isNextSlideBeingOpened = true) {
+        const targetMarginLeft = isNextSlideBeingOpened ? -200 : 0;
+        isAnimationStillActive.current = true; /* HAVE TO FIND A WAY TO RESTRICT SLIDE CHANGE WITHOUT THIS VARIABLE! */
+        return new Promise(async (resolve) => {
+            for (let i = newMarginLeft; i <= targetMarginLeft; i++) {
+
+                setMarginLeft(i);
+                await wait();
+                if (i === targetMarginLeft) {
+                    isAnimationStillActive.current = false;
+                    resolve();
+                }
+            }
+        });
+    }
+
     async function animateLeft() {
         isAnimationStillActive.current = true;
         return new Promise(async (resolve) => {
